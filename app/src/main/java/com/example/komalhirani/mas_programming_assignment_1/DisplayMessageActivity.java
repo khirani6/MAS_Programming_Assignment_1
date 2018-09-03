@@ -4,7 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.content.Intent;
 import android.content.BroadcastReceiver;
-import android.widget.EditText;
+import android.util.Log;
 import android.widget.TextView;
 import android.view.View;
 import android.widget.Button;
@@ -13,28 +13,13 @@ import android.content.pm.PackageManager;
 import static android.Manifest.permission.SEND_SMS;
 import android.app.Activity;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Build;
-import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.telephony.SmsManager;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class DisplayMessageActivity extends AppCompatActivity {
@@ -68,6 +53,8 @@ public class DisplayMessageActivity extends AppCompatActivity {
         userTextView.setText(userName);
 
         sendFallButton = findViewById(R.id.fallButton);
+        //String alertMessage = userName + " has fallen!";
+        //Log.d("Alert message", alertMessage);
 
         /* Got help to integrate SMS from
         SMS Tutorial:
