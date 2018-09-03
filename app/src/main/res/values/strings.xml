@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MAS_Programming_Assignment_1</string>
+    <string name="login_name">Login</string>
+    <string name="submit_button_name">Submit</string>
+    <string name="userName_hint">Username</string>
+    <string name="password_hint">Password</string>
 </resources>
