@@ -9,6 +9,7 @@ import android.widget.EditText;
 public class MainActivity extends AppCompatActivity {
 
     public static final String USER_NAME = "Profile Created";
+    public static final String CONTACT_PHONE = "888-888-8888";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +27,10 @@ public class MainActivity extends AppCompatActivity {
         EditText passWord = findViewById(R.id.passwordField);
         //needed for Firebase data I'm assuming
         String passwordStr = passWord.getText().toString();
+        EditText contactPhone = findViewById(R.id.contactNumber);
+        String contactStr = contactPhone.getText().toString();
         intent.putExtra(USER_NAME, userNameStr);
+        intent.putExtra(CONTACT_PHONE, contactStr);
         startActivity(intent);
 
     }
