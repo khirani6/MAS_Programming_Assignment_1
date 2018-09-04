@@ -176,12 +176,13 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
     protected void onStart(){
         super.onStart();
-        setFullName(firstName, lastName);
+        //setFullName(firstName, lastName);
     }
 
     public void sendFall() {
         //will allow text message to be sent to a contact
         String alertMessage = fullName + " has fallen!";
+        Log.d("Alert Message", alertMessage);
         String contactNumber = mContactPhoneNumberField.getText().toString();
         //Remove whitespace and non-numeric characters
         contactNumber = contactNumber.trim();
@@ -208,7 +209,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
     public void onResume() {
         super.onResume();
-        setFullName(firstName, lastName);
+        //setFullName(firstName, lastName);
         sentStatusReceiver= new BroadcastReceiver() {
 
             @Override
