@@ -30,7 +30,6 @@ public class DisplayMessageActivity extends AppCompatActivity {
     private String contactNumber;
     private Button sendFallButton;
     private String userName;
-    private TextView sendStatusTextView;
     private TextView deliveryStatusTextView;
 
     private BroadcastReceiver sentStatusReceiver, deliveredStatusReceiver;
@@ -141,8 +140,6 @@ public class DisplayMessageActivity extends AppCompatActivity {
                     default:
                         break;
                 }
-                sendStatusTextView.setText(s);
-
             }
         };
         deliveredStatusReceiver=new BroadcastReceiver() {
