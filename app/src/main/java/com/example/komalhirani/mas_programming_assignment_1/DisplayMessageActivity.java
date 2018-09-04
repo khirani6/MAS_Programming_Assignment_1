@@ -98,6 +98,9 @@ public class DisplayMessageActivity extends AppCompatActivity {
                     lastName = new String(dataSnapshot.getValue(String.class));
                     //person.setLastName(lastName);
                     setLastName(lastName);
+                    if (lastName != null) {
+                        setFullName(firstName, lastName);
+                    }
                     Log.d("Last Name", lastName);
                 }
 
@@ -112,7 +115,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
             //boolean emailVerified = user.isEmailVerified();
         }
-        setFullName(firstName, lastName);
+
         sendFallButton = findViewById(R.id.fallButton);
         sendFallButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,7 +166,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
     public void setLastName(String last) {
         lastName = last;
-        setFullName(firstName, lastName);
+        //setFullName(firstName, lastName);
     }
 
     public void setFullName(String first, String last) {
