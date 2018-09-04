@@ -80,8 +80,9 @@ public class DisplayMessageActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     firstName = new String(dataSnapshot.getValue(String.class));
-                    person.setFirstName(firstName);
+                    //person.setFirstName(firstName);
                     //userTextView.setText(firstName);
+                    setFirstName(firstName);
                     Log.d("First name", firstName);
                 }
 
@@ -95,7 +96,8 @@ public class DisplayMessageActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     lastName = new String(dataSnapshot.getValue(String.class));
-                    person.setLastName(lastName);
+                    //person.setLastName(lastName);
+                    setLastName(lastName);
                     Log.d("Last Name", lastName);
                 }
 
@@ -104,14 +106,13 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
                 }
             });
-            fullName = person.getFirstName() + " " + person.getLastName();
-            userTextView.setText(fullName);
+            //fullName = person.getFirstName() + " " + person.getLastName();
+            //userTextView.setText(fullName);
+
 
             //boolean emailVerified = user.isEmailVerified();
-
         }
-
-
+        setFullName(firstName, lastName);
         sendFallButton = findViewById(R.id.fallButton);
         sendFallButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +157,24 @@ public class DisplayMessageActivity extends AppCompatActivity {
         });
     }
 
+    public void setFirstName(String first) {
+        firstName = first;
+    }
+
+    public void setLastName(String last) {
+        lastName = last;
+        setFullName(firstName, lastName);
+    }
+
+    public void setFullName(String first, String last) {
+        fullName = first + " " + last;
+        userTextView.setText(fullName);
+    }
+
+    protected void onStart(){
+        super.onStart();
+        setFullName(firstName, lastName);
+    }
 
     public void sendFall() {
         //will allow text message to be sent to a contact
@@ -186,6 +205,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
     public void onResume() {
         super.onResume();
+        setFullName(firstName, lastName);
         sentStatusReceiver= new BroadcastReceiver() {
 
             @Override
