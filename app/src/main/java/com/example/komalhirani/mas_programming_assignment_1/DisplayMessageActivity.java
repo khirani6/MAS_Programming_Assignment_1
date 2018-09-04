@@ -1,36 +1,35 @@
 package com.example.komalhirani.mas_programming_assignment_1;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.content.Intent;
-import android.content.BroadcastReceiver;
-import android.util.Log;
-import android.widget.TextView;
-import android.view.View;
-import android.widget.Button;
 import android.Manifest;
-import android.content.pm.PackageManager;
-import static android.Manifest.permission.SEND_SMS;
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import static android.Manifest.permission.SEND_SMS;
 
 public class DisplayMessageActivity extends AppCompatActivity {
 
     private static final int REQUEST_SMS = 0;
-    private static final int REQ_PICK_CONTACT = 2;
 
-    private String contactNumber;
     private Button sendFallButton;
     private String userName;
-    private TextView deliveryStatusTextView;
+    private EditText mContactPhoneNumberField;
 
     private BroadcastReceiver sentStatusReceiver, deliveredStatusReceiver;
 
@@ -38,6 +37,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_message);
+        mContactPhoneNumberField = findViewById(R.id.display_message_contact_field);
 
         /*intent code is based on android's developers documentation:
         https://developer.android.com/training/basics/firstapp/starting-activity#java
@@ -46,12 +46,16 @@ public class DisplayMessageActivity extends AppCompatActivity {
         Intent intent = getIntent();
         userName = intent.getStringExtra(MainActivity.USER_NAME);
 
-        contactNumber = intent.getStringExtra(MainActivity.CONTACT_PHONE);
-
         TextView userTextView = findViewById(R.id.userNameText);
         userTextView.setText(userName);
 
         sendFallButton = findViewById(R.id.fallButton);
+        sendFallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendFall();
+            }
+        });
         //String alertMessage = userName + " has fallen!";
         //Log.d("Alert message", alertMessage);
 
@@ -63,27 +67,27 @@ public class DisplayMessageActivity extends AppCompatActivity {
         sendFallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                    int hasSMSPermission = checkSelfPermission(Manifest.permission.SEND_SMS);
-                    if (hasSMSPermission != PackageManager.PERMISSION_GRANTED) {
-                        if (!shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS)) {
-                            showMessageOKCancel("You need to allow access to Send SMS",
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                                requestPermissions(new String[]{Manifest.permission.SEND_SMS},
-                                                        REQUEST_SMS);
-                                            }
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                int hasSMSPermission = checkSelfPermission(Manifest.permission.SEND_SMS);
+                if (hasSMSPermission != PackageManager.PERMISSION_GRANTED) {
+                    if (!shouldShowRequestPermissionRationale(Manifest.permission.SEND_SMS)) {
+                        showMessageOKCancel("You need to allow access to Send SMS",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                            requestPermissions(new String[]{Manifest.permission.SEND_SMS},
+                                                    REQUEST_SMS);
                                         }
-                                    });
-                            return;
-                        }
-                        requestPermissions(new String[]{Manifest.permission.SEND_SMS},
-                                REQUEST_SMS);
+                                    }
+                                });
                         return;
                     }
-                    sendFall();
+                    requestPermissions(new String[]{Manifest.permission.SEND_SMS},
+                            REQUEST_SMS);
+                    return;
+                }
+                sendFall();
                 }
             }
         });
@@ -93,8 +97,11 @@ public class DisplayMessageActivity extends AppCompatActivity {
     public void sendFall() {
         //will allow text message to be sent to a contact
         String alertMessage = userName + " has fallen!";
-        System.out.print(alertMessage);
-        if (contactNumber.isEmpty()) {
+        String contactNumber = mContactPhoneNumberField.getText().toString();
+        //Remove whitespace and non-numeric characters
+        contactNumber = contactNumber.trim();
+        contactNumber = contactNumber.replaceAll("\\W", "");
+        if (contactNumber.length() < 10) {
             Toast.makeText(getApplicationContext(), "Please Enter a Valid Phone Number", Toast.LENGTH_SHORT).show();
         } else {
 
@@ -116,7 +123,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
     public void onResume() {
         super.onResume();
-        sentStatusReceiver=new BroadcastReceiver() {
+        sentStatusReceiver= new BroadcastReceiver() {
 
             @Override
             public void onReceive(Context arg0, Intent arg1) {
@@ -154,7 +161,6 @@ public class DisplayMessageActivity extends AppCompatActivity {
                     case Activity.RESULT_CANCELED:
                         break;
                 }
-                deliveryStatusTextView.setText(s);
             }
         };
         registerReceiver(sentStatusReceiver, new IntentFilter("SMS_SENT"));

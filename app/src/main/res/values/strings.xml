@@ -1,7 +1,18 @@
 <resources>
     <string name="app_name">MAS_Programming_Assignment_1</string>
+
+    <!-- UI Strings -->
     <string name="login_name">Login</string>
     <string name="submit_button_name">Submit</string>
     <string name="userName_hint">Username</string>
     <string name="password_hint">Password</string>
+    <string name="signup_title">Sign Up</string>
+    <string name="signup_first_name">First Name</string>
+    <string name="signup_last_name">Last Name</string>
+    <string name="signup_email">Email</string>
+    <string name="signup_create_account">Create Account</string>
+    <string name="display_message_phone_number_prompt">Emergency Contact Phone Number</string>
+
+    <!-- Error Messages -->
+    <string name="password_too_short_error">Password must contain at least 6 characters.</string>
 </resources>
