@@ -16,6 +16,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -49,7 +51,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    private void createAccount(String email, String password) {
+    private void createAccount(final String email, String password) {
         if (password.length() >= 6) {
             mAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -61,8 +63,10 @@ public class SignUpActivity extends AppCompatActivity {
                                 String firstName = mFirstNameField.getText().toString();
                                 String lastName = mLastNameField.getText().toString();
 
-                                final String displayN = firstName + " "+ lastName;
-
+                                User user = new User(firstName, lastName, email);
+                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                DatabaseReference ref = database.getReference("Users");
+                                ref.child(user.getEncodedEmail()).setValue(user);
 
                                 Log.d(TAG, "createUserWithEmail:success");
                                 Intent intent = new Intent(
@@ -89,7 +93,7 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(
                     SignUpActivity.this,
                     getResources().getString(R.string.password_too_short_error),
-                    Toast.LENGTH_SHORT);
+                    Toast.LENGTH_SHORT).show();
         }
 
     }
