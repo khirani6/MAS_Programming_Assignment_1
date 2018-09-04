@@ -12,6 +12,7 @@
     <string name="signup_email">Email</string>
     <string name="signup_create_account">Create Account</string>
     <string name="display_message_phone_number_prompt">Emergency Contact Phone Number</string>
+    <string name="signup_account_created_confirmation">Account Created!</string>
 
     <!-- Error Messages -->
     <string name="password_too_short_error">Password must contain at least 6 characters.</string>
