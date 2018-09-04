@@ -69,14 +69,11 @@ public class SignUpActivity extends AppCompatActivity {
                                 ref.child(user.getEncodedEmail()).setValue(user);
 
                                 Log.d(TAG, "createUserWithEmail:success");
-                                Intent intent = new Intent(
-                                        SignUpActivity.this,
-                                        DisplayMessageActivity.class);
-                                startActivity(intent);
 
-
-
-
+                                Toast.makeText(getApplicationContext(),
+                                        getResources().getString(R.string.signup_account_created_confirmation),
+                                        Toast.LENGTH_SHORT).show();
+                                onBackPressed();
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
