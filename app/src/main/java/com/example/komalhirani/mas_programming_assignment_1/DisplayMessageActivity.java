@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -26,14 +27,24 @@ import static android.Manifest.permission.SEND_SMS;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class DisplayMessageActivity extends AppCompatActivity {
 
     private static final int REQUEST_SMS = 0;
 
     private Button sendFallButton;
-    private String userName;
+    //private String userName;
     private EditText mContactPhoneNumberField;
+    public String firstName;
+    public String lastName;
+    private String fullName;
+    private TextView userTextView;
+    public User person;
 
     private BroadcastReceiver sentStatusReceiver, deliveredStatusReceiver;
 
@@ -52,18 +63,57 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
         //TextView userTextView = findViewById(R.id.userNameText);
         //userTextView.setText(userName);
+        userTextView = findViewById(R.id.userNameText);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        person = new User();
         if (user != null) {
-            String name = user.getDisplayName();
-            if (name != null) {
-                Log.d("Username", name);
-            } else {
-                Log.d("Username", "no username");
-            }
-            userName = name;
+            String email = user.getEmail();
+            String emailWithCommas = email.replace('.', ',');
+            Log.d("Email", email);
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference ref = database.getReference("Users");
+            DatabaseReference userPerson = ref.child(emailWithCommas);
+            DatabaseReference firstNameDataRef = userPerson.child("firstName");
+            DatabaseReference lastNameDataRef = userPerson.child("lastName");
+
+            firstNameDataRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    firstName = new String(dataSnapshot.getValue(String.class));
+                    //person.setFirstName(firstName);
+                    //userTextView.setText(firstName);
+                    setFirstName(firstName);
+                    Log.d("First name", firstName);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            lastNameDataRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    lastName = new String(dataSnapshot.getValue(String.class));
+                    //person.setLastName(lastName);
+                    setLastName(lastName);
+                    if (lastName != null) {
+                        setFullName(firstName, lastName);
+                    }
+                    Log.d("Last Name", lastName);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+            //fullName = person.getFirstName() + " " + person.getLastName();
+            //userTextView.setText(fullName);
+
 
             //boolean emailVerified = user.isEmailVerified();
-
         }
 
         sendFallButton = findViewById(R.id.fallButton);
@@ -110,10 +160,29 @@ public class DisplayMessageActivity extends AppCompatActivity {
         });
     }
 
+    public void setFirstName(String first) {
+        firstName = first;
+    }
+
+    public void setLastName(String last) {
+        lastName = last;
+        //setFullName(firstName, lastName);
+    }
+
+    public void setFullName(String first, String last) {
+        fullName = first + " " + last;
+        userTextView.setText(fullName);
+    }
+
+    protected void onStart(){
+        super.onStart();
+        //setFullName(firstName, lastName);
+    }
 
     public void sendFall() {
         //will allow text message to be sent to a contact
-        String alertMessage = userName + " has fallen!";
+        String alertMessage = fullName + " has fallen!";
+        Log.d("Alert Message", alertMessage);
         String contactNumber = mContactPhoneNumberField.getText().toString();
         //Remove whitespace and non-numeric characters
         contactNumber = contactNumber.trim();
@@ -140,6 +209,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
     public void onResume() {
         super.onResume();
+        //setFullName(firstName, lastName);
         sentStatusReceiver= new BroadcastReceiver() {
 
             @Override
