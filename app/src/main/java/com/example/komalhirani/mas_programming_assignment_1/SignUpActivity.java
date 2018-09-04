@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class SignUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -23,6 +24,8 @@ public class SignUpActivity extends AppCompatActivity {
     private Button mCreateAccountButton;
     private EditText mEmailField;
     private EditText mPasswordField;
+    private EditText mFirstNameField;
+    private EditText mLastNameField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +42,11 @@ public class SignUpActivity extends AppCompatActivity {
                 createAccount(email.trim(), password.trim());
             }
         });
+        mFirstNameField = findViewById(R.id.signup_first_name);
+        mLastNameField = findViewById(R.id.signup_last_name);
 
         mAuth = FirebaseAuth.getInstance();
+
     }
 
     private void createAccount(String email, String password) {
@@ -51,11 +57,21 @@ public class SignUpActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, take user to sms button
+
+                                String firstName = mFirstNameField.getText().toString();
+                                String lastName = mLastNameField.getText().toString();
+
+                                final String displayN = firstName + " "+ lastName;
+
+
                                 Log.d(TAG, "createUserWithEmail:success");
                                 Intent intent = new Intent(
                                         SignUpActivity.this,
                                         DisplayMessageActivity.class);
                                 startActivity(intent);
+
+
+
 
                             } else {
                                 // If sign in fails, display a message to the user.
@@ -68,6 +84,7 @@ public class SignUpActivity extends AppCompatActivity {
                             // ...
                         }
                     });
+
         } else {
             Toast.makeText(
                     SignUpActivity.this,
@@ -76,4 +93,5 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
     }
+
 }

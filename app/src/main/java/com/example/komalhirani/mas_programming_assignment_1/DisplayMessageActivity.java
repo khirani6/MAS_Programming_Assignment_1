@@ -20,8 +20,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
 
 import static android.Manifest.permission.SEND_SMS;
+
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class DisplayMessageActivity extends AppCompatActivity {
 
@@ -43,11 +47,24 @@ public class DisplayMessageActivity extends AppCompatActivity {
         https://developer.android.com/training/basics/firstapp/starting-activity#java
          */
 
-        Intent intent = getIntent();
-        userName = intent.getStringExtra(MainActivity.USER_NAME);
+        //Intent intent = getIntent();
+        //userName = intent.getStringExtra(MainActivity.USER_NAME);
 
-        TextView userTextView = findViewById(R.id.userNameText);
-        userTextView.setText(userName);
+        //TextView userTextView = findViewById(R.id.userNameText);
+        //userTextView.setText(userName);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String name = user.getDisplayName();
+            if (name != null) {
+                Log.d("Username", name);
+            } else {
+                Log.d("Username", "no username");
+            }
+            userName = name;
+
+            //boolean emailVerified = user.isEmailVerified();
+
+        }
 
         sendFallButton = findViewById(R.id.fallButton);
         sendFallButton.setOnClickListener(new View.OnClickListener() {

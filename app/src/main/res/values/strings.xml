@@ -4,7 +4,7 @@
     <!-- UI Strings -->
     <string name="login_name">Login</string>
     <string name="submit_button_name">Submit</string>
-    <string name="userName_hint">Username</string>
+    <string name="email_hint">Email</string>
     <string name="password_hint">Password</string>
     <string name="signup_title">Sign Up</string>
     <string name="signup_first_name">First Name</string>
