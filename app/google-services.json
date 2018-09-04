@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1033608821715",
+    "firebase_url": "https://mas-first-assignment.firebaseio.com",
+    "project_id": "mas-first-assignment",
+    "storage_bucket": "mas-first-assignment.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1033608821715:android:a34b23a7ae2405e6",
+        "android_client_info": {
+          "package_name": "com.example.komalhirani.mas_programming_assignment_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1033608821715-3psbm3tlos3ec6m62a7kn4824ou88okd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAViLZGvr3qTPNHFpx6tfgcXLeDXXKGhgM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
